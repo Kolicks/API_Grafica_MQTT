@@ -29,16 +29,16 @@
 			data: {
 				datasets: [
           {
-            label: 'Temperature',
+            label: 'Temperatura',
             //backgroundColor: "",
-            borderColor: "#F10",//window.chartColors.red,
+            borderColor: "#F00",//window.chartColors.red,
             data: [],
             fill: false,
           },
           {
-            label: 'Humidity',
+            label: 'Humitat',
             //backgroundColor: "",
-            borderColor: "#F00",//window.chartColors.red,
+            borderColor: "",//window.chartColors.red,
             data: [],
             fill: false,
           },
@@ -68,15 +68,11 @@
       var socket = new WebSocket('ws://localhost:40301');
 
       socket.onmessage = async function (event) {
+
+        //Bolquem la informació en una variable de tipus objecte
         let obj = JSON.parse(event.data);
         
-        //console.log(obj);
-        //let dades = [];
-        //dades[0] = obj.temperature;
-        //dades[1] = obj.humidity;
-        //console.log(dades[0]);
-        //console.log(dades[1]);
-        
+        //Incrementem l'index
         current_elements += event.length;
 
         if(current_elements > MAX_ELEMENTS) {
@@ -86,8 +82,10 @@
         }
          
         myChart.data.labels.push("");
-        myChart.data.datasets[0].data.push(obj.temperature);
-        //myChart.data.datasets[1].data.push(obj.humidity);
+        // Escrivim les dades
+        myChart.data.datasets[0].data.push(obj.Temperatura);
+        myChart.data.datasets[1].data.push(obj.Humitat);
+        //Actualitzem el gràfic
         myChart.update();
       }
 
