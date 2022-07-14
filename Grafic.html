@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+    <style>
+    canvas{
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+    </style>
+  </head>
+<body>
+
+<h1>Dades ambientals i de consum</h1>
+<!-- <textarea id="myText" cols="40" rows="5"></textarea> -->
+<canvas id="canvas" width="1984" height="992" class="chartjs-render-monitor" style="display: block; height: 496px; width: 992px;"></canvas>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script>
+  var myChart;
+  var socket;
+  const MAX_ELEMENTS = 25000;
+  var current_elements = 0;
+
+  var config = {
+			type: 'line',
+			data: {
+				datasets: [
+          {
+            label: 'Temperature',
+            //backgroundColor: "",
+            borderColor: "#F10",//window.chartColors.red,
+            data: [],
+            fill: false,
+          },
+          {
+            label: 'Humidity',
+            //backgroundColor: "",
+            borderColor: "#F00",//window.chartColors.red,
+            data: [],
+            fill: false,
+          },
+      ]
+			},
+			options: {
+				responsive: true,
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+        scales: {
+            yAxes: [{
+                ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: 50
+                }
+            }]
+        }
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			myChart = new Chart(ctx, config);
+
+      var socket = new WebSocket('ws://localhost:40301');
+
+      socket.onmessage = async function (event) {
+        let obj = JSON.parse(event.data);
+        
+        //console.log(obj);
+        //let dades = [];
+        //dades[0] = obj.temperature;
+        //dades[1] = obj.humidity;
+        //console.log(dades[0]);
+        //console.log(dades[1]);
+        
+        current_elements += event.length;
+
+        if(current_elements > MAX_ELEMENTS) {
+          n = current_elements-MAX_ELEMENTS;
+          myChart.data.labels.splice(0, n);
+          myChart.data.datasets[0].data.splice(0, n);
+        }
+         
+        myChart.data.labels.push("");
+        myChart.data.datasets[0].data.push(obj.temperature);
+        //myChart.data.datasets[1].data.push(obj.humidity);
+        myChart.update();
+      }
+
+    };
+</script>
+</html>
