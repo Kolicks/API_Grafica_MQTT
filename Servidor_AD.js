@@ -43,7 +43,7 @@ const client  = mqtt.connect('https://eu1.cloud.thethings.network', options)
 
 // Poseu aquí l'ID del vostre dispositiu (End Device ID)
 // Quedareu subscrits ÚNICAMENT a aquest
-let DeviceID = 'eui-70b3d57ed005336c'; // 
+let DeviceID = 'eui-70b3d57ed0053311'; // 
 
 client.on('connect', function() {
     console.log('Client connectat a TTN')
