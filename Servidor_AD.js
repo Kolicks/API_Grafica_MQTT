@@ -57,16 +57,21 @@ client.on('error', function(err) {
 client.on('message', function(topic, message) {
     // La rebem i volquem a una variable objecte
     var getDataFromTTN = JSON.parse(message);
-    console.log("Dades de TTN: ", getDataFromTTN.uplink_message.decoded_payload);
-    
-    /* Exemple que serveix per observar que podriem prescindir del Decoder de la API
-    var getFrmPayload = getDataFromTTN.uplink_message.frm_payload;
-    globalMQTT = Buffer.from(getFrmPayload, 'base64');
-    console.log(globalMQTT);*/
-    
-    //Utilitzem les ja descodificades i les enviem per WebSocket
 
-    ws.send(JSON.stringify(getDataFromTTN.uplink_message.decoded_payload));
+    if (getDataFromTTN.uplink_message.hasOwnProperty('decoded_payload')) {
+        
+        console.log("Dades de TTN: ", getDataFromTTN.uplink_message.decoded_payload);
+    
+        /* Exemple que serveix per observar que podriem prescindir del Decoder de la API
+        var getFrmPayload = getDataFromTTN.uplink_message.frm_payload;
+        globalMQTT = Buffer.from(getFrmPayload, 'base64');
+        console.log(globalMQTT);*/
+        
+        //Utilitzem les ja descodificades i les enviem per WebSocket
+
+        ws.send(JSON.stringify(getDataFromTTN.uplink_message.decoded_payload));
+
+    }
 
 });
 
