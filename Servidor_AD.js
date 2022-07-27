@@ -27,7 +27,7 @@ var options = { // Configuració i certificats del client MQTT
 
 //------------------------Executem el servidor i client WEB---------------------------------//
 const app = express(); // La seva execució
-const port = 40300; // Port de l'API Gràfica
+const port = 40310; // Port de l'API Gràfica
 
 let portWS = 40301; // Port del WebSocket
 const wss= new WebSocket.Server({host: "localhost",port: portWS}); // Servidor WebSocket
